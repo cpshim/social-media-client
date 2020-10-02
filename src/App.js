@@ -6,8 +6,11 @@ import {
   Route,
   Link
 } from 'react-router-dom';
-import Profile from './Profile';
-import Home from './Home';
+import Profile from './components/Profile';
+import LandingPage from './components/LandingPage';
+import Home from './components/Home';
+import Signup from './components/Signup';
+import Login from './components/Login';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/Nav';
@@ -25,7 +28,7 @@ function App() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link><Link to ='/'>Home</Link></Nav.Link>
+              <Nav.Link><Link to ='/home'>Home</Link></Nav.Link>
               <Nav.Link><Link to ='/profile'>Profile</Link></Nav.Link>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
@@ -47,11 +50,20 @@ function App() {
         </Navbar>
 
         <Switch>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
           <Route path="/profile">
             <Profile />
           </Route>
-          <Route exact path="/">
+          <Route path="/home">
             <Home />
+          </Route>
+          <Route path="/signup">
+            <Signup />
+          </Route>
+          <Route path="/login">
+            <Login />
           </Route>
         </Switch>
       </Router>
