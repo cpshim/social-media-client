@@ -3,11 +3,7 @@ import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 
-const myHeaders = new Headers();
-myHeaders.append(
-  "Authorization",
-  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Zjc0ZmIzYTJlN2I0YjFlOGIyMTU0ZDkiLCJpYXQiOjE2MDE1MDIwNTc4MTYsImV4cCI6MTYwMTUwMjE0NDIxNn0.hCNSCEL2ietA6kyC_EEtJxvHbA44gXI0d2UG2vRkolg"
-);
+const myStorage = window.localStorage;
 
 class Home extends React.Component {
   constructor(props) {
@@ -21,16 +17,25 @@ class Home extends React.Component {
       likes: null,
       text: null,
       username: null,
+      currentUser: null,
+      newPostText: "",
     };
 
     this.getPosts = this.getPosts.bind(this);
+    this.createPost = this.createPost.bind(this);
+    this.handleText = this.handleText.bind(this);
+
+    this.getPosts();
   }
 
   async getPosts() {
     try {
       const response = await fetch(`http://localhost:5000/posts`, {
         mode: "cors",
-        headers: myHeaders,
+        headers: {
+          "Authorization": myStorage.getItem("token"),
+          "Content-Type": "application/json"
+        },
       });
       const postData = await response.json();
 
@@ -44,8 +49,50 @@ class Home extends React.Component {
     }
   }
 
-  handleClick(e) {
+  async createPost() {
+    try {
+      const response = await fetch(`http://localhost:5000/posts/create`, {
+        mode: "cors",
+        method: "POST",
+        headers: {
+          "Authorization": myStorage.getItem("token"),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          username: "kkrism",
+          text: this.state.newPostText,
+        }),
+      });
+      const postData = await response.json();
+
+      this.setState({
+        posts: postData,
+      });
+
+      console.log(postData);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  signOut() {
+    myStorage.removeItem("token");
+  }
+
+  handleSignOut(e) {
     e.preventDefault();
+    this.signOut();
+  }
+
+  handleText({ target }) {
+    this.setState({
+      newPostText: target.value,
+    });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    this.createPost();
     this.getPosts();
   }
 
@@ -53,32 +100,43 @@ class Home extends React.Component {
     return (
       <div>
         <header className="App-header">
-          <Form>
+          <Button onClick={(e) => this.handleSignOut(e)} variant="primary">
+            Sign Out
+          </Button>
+          <Form onSubmit={(e) => this.handleSubmit(e)}>
             <Form.Group controlId="exampleForm.ControlTextarea1">
-              <Form.Label>Example textarea</Form.Label>
+              <Form.Label style={{ fontSize: 22 }}>
+                Share what's going on in your life
+              </Form.Label>
               <Form.Control
+                onChange={this.handleText}
                 as="textarea"
+                maxLength="100"
                 rows="3"
                 placeholder="What's on your mind?"
               />
             </Form.Group>
+            <Form.Text className="text-muted" style={{ fontSize: 12 }}>
+              {this.state.newPostText.length}/100 Character Limit
+            </Form.Text>
             <Button variant="primary" type="submit">
               Submit
             </Button>
           </Form>
-          <Button onClick={(e) => this.getPosts(e)}>Get Posts</Button>
-          {this.state.posts.map((post, index) => (
-            <Card text="dark">
-              <Card.Body>
-                <blockquote className="blockquote mb-0">
-                  <Card.Text>{post.text}</Card.Text>
-                  <footer className="blockquote-footer">
-                    {`${post.username} @ ${post.date}`}
-                  </footer>
-                </blockquote>
-              </Card.Body>
-            </Card>
-          ))}
+          <div className="Card-grid">
+            {this.state.posts.map((post, index) => (
+              <Card text="dark">
+                <Card.Body>
+                  <blockquote className="blockquote mb-0">
+                    <Card.Text>{post.text}</Card.Text>
+                    <footer className="blockquote-footer">
+                      {`${post.username} @ ${post.date}`}
+                    </footer>
+                  </blockquote>
+                </Card.Body>
+              </Card>
+            ))}
+          </div>
         </header>
       </div>
     );

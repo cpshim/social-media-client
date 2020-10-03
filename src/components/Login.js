@@ -10,6 +10,8 @@ import Form from "react-bootstrap/Form";
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 
+const myStorage = window.localStorage;
+
 class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +38,8 @@ class Login extends React.Component {
         }),
       });
       const loginData = await response.json();
-      console.log(loginData);
+      myStorage.setItem('token', loginData.token.token);
+      console.log(myStorage.getItem('token'));
     } catch (err) {
       console.log(err);
     }

@@ -1,48 +1,43 @@
 import React from "react";
-import logo from '../logo.svg';
-import Button from 'react-bootstrap/Button';
-import {
-    BrowserRouter as Router,
-    Link
-  } from 'react-router-dom';
+import logo from "../logo.svg";
+import Button from "react-bootstrap/Button";
+import Jumbotron from "react-bootstrap/Jumbotron";
+import { BrowserRouter as Router, Link } from "react-router-dom";
 
 class Home extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            posts: [],
-            id: null,
-            comments: null,
-            date: null,
-            likes: null,
-            text: null,
-            username: null
-        }
-    }
+    this.state = {
+      posts: [],
+      id: null,
+      comments: null,
+      date: null,
+      likes: null,
+      text: null,
+      username: null,
+    };
+  }
 
-    render() {
-        return (
-          <div>
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a>
+  render() {
+    return (
+      <div>
+        <header className="App-header">
+          <Jumbotron className="jumbotron">
+            <h1>Welcome to Social Lyfe!</h1>
+            <img src={logo} className="App-logo" alt="logo" />
+            <p>
+              Connect and share what's happening in your life with the people around you.
+            </p>
+            <p>
+              <Button variant="primary">Learn more</Button>
               <Button>Login</Button>
-            </header>
-          </div>
-        );
-    }
-  
+            </p>
+          </Jumbotron>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default Home;
