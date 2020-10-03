@@ -33,8 +33,8 @@ class Home extends React.Component {
       const response = await fetch(`http://localhost:5000/posts`, {
         mode: "cors",
         headers: {
-          "Authorization": myStorage.getItem("token"),
-          "Content-Type": "application/json"
+          Authorization: myStorage.getItem("token"),
+          "Content-Type": "application/json",
         },
       });
       const postData = await response.json();
@@ -55,8 +55,8 @@ class Home extends React.Component {
         mode: "cors",
         method: "POST",
         headers: {
-          "Authorization": myStorage.getItem("token"),
-          "Content-Type": "application/json"
+          Authorization: myStorage.getItem("token"),
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           username: "kkrism",
@@ -133,6 +133,13 @@ class Home extends React.Component {
                       {`${post.username} @ ${post.date}`}
                     </footer>
                   </blockquote>
+                </Card.Body>
+                <hr />
+                <Card.Body>
+                  <Card.Text style={{ fontSize: 18 }}>
+                    Likes {post.likes}{" "}
+                    <Card.Link>Comments {post.comments}</Card.Link>
+                  </Card.Text>
                 </Card.Body>
               </Card>
             ))}

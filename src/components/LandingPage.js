@@ -31,7 +31,10 @@ class Home extends React.Component {
             </p>
             <p>
               <Button variant="primary">Learn more</Button>
+            </p>
+            <p>
               <Button>Login</Button>
+              <Button>Sign Up</Button>
             </p>
           </Jumbotron>
         </header>
